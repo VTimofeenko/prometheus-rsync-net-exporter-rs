@@ -1,0 +1,38 @@
+name: Update Dependencies
+
+on:
+  schedule:
+    # At 00:00 on day 1 of the month.
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: DeterminateSystems/nix-installer-action@v21
+
+      - uses: DeterminateSystems/magic-nix-cache-action@v13
+
+      - name: Update Flake Lock
+        run: nix flake update
+
+      - name: Update Cargo Lock
+        run: nix develop --command cargo update
+
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add flake.lock Cargo.lock
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update dependencies"
+            git push origin HEAD:master
+          else
+            echo "No changes to commit"
+          fi
