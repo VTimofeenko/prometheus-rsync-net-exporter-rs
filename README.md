@@ -1,5 +1,5 @@
-A `prometheus` [rsync.net] scraper that reports usage by running `quota` command
-in the background.
+A `prometheus` [rsync.net](https://rsync.net) scraper that reports usage by
+running `quota` command in the background.
 
 # Example
 
