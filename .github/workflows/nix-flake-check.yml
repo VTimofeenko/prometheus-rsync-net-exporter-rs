@@ -1,0 +1,17 @@
+---
+name: "Run nix flake check to test the project"
+"on":
+  push:
+    branches:
+      - master
+
+jobs:
+  nix-flake-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DeterminateSystems/nix-installer-action@v21
+      - uses: DeterminateSystems/magic-nix-cache-action@v13
+      - name: "Run nix flake check"
+        run: nix flake check
