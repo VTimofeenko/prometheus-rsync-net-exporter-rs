@@ -49,15 +49,13 @@ run a specific command, `quota` in our case.
 1. Generate a new SSH key, e.g. `~/.ssh/id_rsync_quota`
 2. Add the ssh key to the authorized_keys and limit it to `quota only`:
 
-    > [!CAUTION]
-    > Double check the command output so as not to break or overwrite authorized_keys
+> [!CAUTION]
+> Double check the command output so as not to break or overwrite authorized_keys
 
-    ```shell
-
-    cat <<EOF | ssh rsync.net 'dd of=.ssh/authorized_keys oflag=append conv=notrunc'
-    restrict,command="quota" $(cat ~/.ssh/id_rsync_quota.pub)
-    EOF
-    ```
+```shell
+cat <<EOF | ssh rsync.net 'dd of=.ssh/authorized_keys oflag=append conv=notrunc' restrict,command="quota" $(cat ~/.ssh/id_rsync_quota.pub)
+EOF
+```
 
 ## Nix
 
