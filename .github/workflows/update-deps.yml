@@ -20,10 +20,10 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v13
 
       - name: Update Flake Lock
-        run: nix flake update
+        run: nix flake update 2>&1 | tee flake_updates.log
 
       - name: Update Cargo Lock
-        run: nix develop --command cargo update
+        run: nix develop --command cargo update --color never 2>&1 | tee cargo_updates.log
 
       - name: Commit and Push
         run: |
@@ -31,7 +31,14 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add flake.lock Cargo.lock
           if ! git diff --staged --quiet; then
-            git commit -m "chore: update dependencies"
+            echo "chore: update dependencies" > commit_message.txt
+            echo "" >> commit_message.txt
+            echo "## Nix" >> commit_message.txt
+            cat flake_updates.log >> commit_message.txt
+            echo "" >> commit_message.txt
+            echo "## Cargo" >> commit_message.txt
+            cat cargo_updates.log >> commit_message.txt
+            git commit -F commit_message.txt
             git push origin HEAD:master
           else
             echo "No changes to commit"
