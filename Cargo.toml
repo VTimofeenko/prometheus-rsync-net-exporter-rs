@@ -2,6 +2,9 @@
 name = "prometheus-rsync-net-exporter"
 version = "1.0.0"
 edition = "2024"
+description = "Exporter for rsync.net usage that parses quota reply"
+license = "Apache-2.0"
+repository = "https://github.com/VTimofeenko/prometheus-rsync-net-exporter-rs"
 
 [dependencies]
 tokio = { version = "1", features = ["full"] }
